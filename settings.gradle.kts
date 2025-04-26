@@ -21,6 +21,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Skeleton"
+rootProject.name = "TMDBSample"
 include(":app")
  

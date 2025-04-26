@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Skeleton</string>
+    <string name="app_name">TMDB Sample</string>
     <string name="error">Error</string>
 </resources>

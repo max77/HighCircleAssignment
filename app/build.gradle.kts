@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,17 +8,29 @@ plugins {
 }
 
 android {
-    namespace = "com.max77.skeleton"
+    namespace = "com.max77.tmdbsample"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.max77.skeleton"
+        applicationId = "com.max77.tmdbsample"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProperties = Properties().apply {
+            val localPropertiesFile = rootProject.file("local.properties")
+            if (localPropertiesFile.exists()) {
+                load(localPropertiesFile.inputStream())
+            }
+        }
+
+        // Get the TMDB_API_KEY from local.properties
+        val tmdbApiKey = localProperties.getProperty("tmdb_api_key") ?: ""
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
+        buildConfigField("String", "TMDB_BASE_URL", "\"https://api.themoviedb.org/3\"")
     }
 
     buildTypes {
@@ -37,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -44,6 +59,7 @@ dependencies {
     // !!! keep these together
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx)
+    implementation(libs.androidx.paging)
 
     // !!! keep these together
     implementation(platform(libs.koin.bom))
@@ -54,8 +70,6 @@ dependencies {
     implementation(libs.bundles.ktor)
 
     implementation(libs.kotlinx.datetime)
-    implementation(libs.play.services.location)
-    implementation(libs.accompanist)
     implementation(libs.coil)
 
 //    testImplementation(libs.junit)
